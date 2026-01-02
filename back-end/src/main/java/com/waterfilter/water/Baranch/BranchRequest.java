@@ -13,5 +13,6 @@ public class BranchRequest {
     private String name;
     private String phoneNumber;
     private String managerName;
+    private double coverageRediusKm;
     private AddressRequest branchAddress;
 }

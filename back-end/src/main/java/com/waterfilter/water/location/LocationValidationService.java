@@ -41,20 +41,21 @@ public class LocationValidationService {
         return locationMapper.locationValidationFaild("Branch address is not configured to any location");
     }
 
+    double coverageRadius = branch.getCoverageRediusKm(); 
     
     // Calculate distance between request location and branch
-    boolean isValid = addressRepository.isEmployeeWithinBranchCoverageNative(request.getEmployeeId(), request.getLatitude(), request.getLongitude());
+    boolean isValid = addressRepository.isEmployeeWithinBranchCoverageNative(request.getEmployeeId(), request.getLatitude(), request.getLongitude(), coverageRadius);
     double distance = 0.0;
     
     if(!isValid){
        distance = locationService.calculateDistance(request.getLatitude(), request.getLongitude(), locationAddress.getLatitude(), locationAddress.getLongitude());
     }
 
-    if(isValid == false || distance > 3.0){
+    if(isValid == false || distance > coverageRadius){
       return locationMapper.locationValidationFaild(
                     String.format(
                       "You are %.2f km away from %s. Maximum allowed distance: %.2f km",
-                      distance, branch.getName(), 3.0
+                      distance, branch.getName(), coverageRadius
                     ));
     }
 

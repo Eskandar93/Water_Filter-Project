@@ -13,5 +13,5 @@ public class BranchResponse {
     private String name;
     private String phoneNumber;
     private String managerName;
-
+    private double coverageRediusKm;
 }

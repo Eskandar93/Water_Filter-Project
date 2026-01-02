@@ -30,6 +30,7 @@ public class Branch {
     private String name;
     private String phoneNumber;
     private String managerName;
+    private double coverageRediusKm;
 
     @OneToOne(mappedBy = "branch", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private Address address;

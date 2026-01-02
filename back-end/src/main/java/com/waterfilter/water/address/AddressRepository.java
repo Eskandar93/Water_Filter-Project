@@ -42,7 +42,7 @@ public interface AddressRepository extends JpaRepository<Address, Long>{
         SELECT CASE WHEN ST_DWithin(
             ST_SetSRID(ST_MakePoint(a.location_longitude, a.location_latitude), 4326)::geography,
             ST_SetSRID(ST_MakePoint(:longitude, :latitude), 4326)::geography,
-            COALESCE(b.coverage_radius_km, 3.0) * 1000
+            COALESCE(b.coverage_radius_km, :defaultRadius) * 1000
         ) THEN true ELSE false END
         FROM employee e
         JOIN branch b ON e.branch_id = b.id
@@ -52,6 +52,7 @@ public interface AddressRepository extends JpaRepository<Address, Long>{
     Boolean isEmployeeWithinBranchCoverageNative(
         @Param("employeeId") Long employeeId,
         @Param("latitude") double latitude,
-        @Param("longitude") double longitude
+        @Param("longitude") double longitude,
+        @Param("defaultRadius") double defaultRadius
     );
 }
