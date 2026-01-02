@@ -10,9 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class BranchRequest {
 
-    private Long branchId;
     private String name;
     private String phoneNumber;
-    private String ManagerName;
+    private String managerName;
     private AddressRequest branchAddress;
 }

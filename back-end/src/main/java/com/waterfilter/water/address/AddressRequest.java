@@ -1,6 +1,8 @@
 package com.waterfilter.water.address;
 
 
+import com.waterfilter.water.location.LocationDto;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,5 +17,5 @@ public class AddressRequest {
     private String postalCode;
     private String famousPlace1;
     private String famousPlace2;
-    private String location;
+    private LocationDto location;
 }

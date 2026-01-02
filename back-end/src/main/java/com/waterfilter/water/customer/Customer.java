@@ -2,7 +2,6 @@ package com.waterfilter.water.customer;
 
 import com.waterfilter.water.Baranch.Branch;
 import com.waterfilter.water.address.Address;
-import com.waterfilter.water.user.UserType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -38,7 +37,7 @@ public class Customer {
     private String phoneNumber;
 
     // One user can have multiple addresses
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Address> customerAddresses;
 
     // Many users belong to one branch

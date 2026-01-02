@@ -3,6 +3,8 @@ package com.waterfilter.water.address;
 import com.waterfilter.water.Baranch.Branch;
 import com.waterfilter.water.customer.Customer;
 import com.waterfilter.water.employee.Employee;
+import com.waterfilter.water.location.Location;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,22 +30,21 @@ public class Address {
     private String postalCode;
     private String famousPlace1;
     private String famousPlace2;
-    private String location;
 
-    @OneToOne
+    @Embedded
+    private Location location;
+
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id")
     private Employee employee;
 
-    @ManyToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
     private Customer customer;
-
-//    @OneToOne
-//    private Branch branch;
-
+ 
     // FIXED: Add cascade and make it the owning side
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "branch_id", referencedColumnName = "branchId")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "branch_id")
     private Branch branch;
 
     // Helper method

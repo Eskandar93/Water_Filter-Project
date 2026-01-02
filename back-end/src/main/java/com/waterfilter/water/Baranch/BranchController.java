@@ -22,9 +22,9 @@ public class BranchController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("updateBranch")
-    public ResponseEntity<ApiResponse<String>> updateBranch(@RequestBody BranchRequest branchRequest){
-        branchService.updateBranch(branchRequest);
+    @PutMapping("updateBranch/{oldBranchId}")
+    public ResponseEntity<ApiResponse<String>> updateBranch(@PathVariable Long oldBranchId, @RequestBody BranchRequest branchRequest){
+        branchService.updateBranch(oldBranchId, branchRequest);
         ApiResponse<String> response = ApiResponse.success("Branch updated successfully");
         return ResponseEntity.ok(response);
     }

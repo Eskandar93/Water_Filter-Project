@@ -7,9 +7,10 @@ public class BranchMapper {
 
     public BranchResponse toBranchResponse(Branch branch) {
         return BranchResponse.builder()
+                .branchId(branch.getBranchId())
                 .name(branch.getName())
                 .phoneNumber(branch.getPhoneNumber())
-                .ManagerName(branch.getManagerName())
+                .managerName(branch.getManagerName())
                 .build();
     }
 

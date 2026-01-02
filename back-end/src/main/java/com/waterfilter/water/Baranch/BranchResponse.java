@@ -9,8 +9,9 @@ import lombok.*;
 @NoArgsConstructor
 public class BranchResponse {
 
+    private Long branchId;
     private String name;
     private String phoneNumber;
-    private String ManagerName;
+    private String managerName;
 
 }

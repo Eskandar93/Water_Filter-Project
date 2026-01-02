@@ -31,8 +31,7 @@ public class Branch {
     private String phoneNumber;
     private String managerName;
 
-    @OneToOne(mappedBy = "branch", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    //@JoinColumn(name = "address_id")
+    @OneToOne(mappedBy = "branch", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private Address address;
 
     @OneToMany(mappedBy = "employeeBranch", cascade = {

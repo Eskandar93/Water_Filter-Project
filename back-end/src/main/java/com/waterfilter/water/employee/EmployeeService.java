@@ -38,6 +38,8 @@ public class EmployeeService {
     // add
     public void addEmployee(EmployeeRequest employeeRequest) {
 
+        // verify token to allow employee for access end-point By role
+        // unauth , unautorize
         if (employeeRepository.findByEmail(employeeRequest.getEmail()).isPresent()) {
             throw new RuntimeException("Employee already exists");
         }

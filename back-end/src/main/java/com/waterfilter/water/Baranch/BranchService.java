@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,28 +32,24 @@ public class BranchService {
         }
 
 
-
+        // create branch
         Branch branch = new Branch();
         branch.setName(branchRequest.getName());
         branch.setPhoneNumber(branchRequest.getPhoneNumber());
         branch.setManagerName(branchRequest.getManagerName());
 
         if(branchRequest.getBranchAddress() != null) {
-            //  Address address = addressMapper.toEntity(branchRequest.getBranchAddress());
-            //  branch.setAddress(address);
-            branch.setAddress(addressMapper.toEntity(branchRequest.getBranchAddress()));
+              Address address = addressMapper.toEntity(branchRequest.getBranchAddress());
+              branch.setAddress(address);
         }
 
         branchRepository.save(branch);
     }
-    public void updateBranch(BranchRequest branchRequest) {
+    public void updateBranch(Long oldBranchId, BranchRequest branchRequest) {
 
-        Optional<Branch> existingBranch = branchRepository.findById(branchRequest.getBranchId());
-        if (!existingBranch.isPresent()) {
-            throw new ResourceNotFoundException("Branch not found with id: " + branchRequest.getBranchId());
-        }
+        Branch branch = branchRepository.findById(oldBranchId)
+        .orElseThrow(()-> new ResourceNotFoundException("Branch not found with id: " + oldBranchId));
 
-        Branch branch = existingBranch.get();
         branch.setName(branchRequest.getName());
         branch.setPhoneNumber(branchRequest.getPhoneNumber());
         branch.setManagerName(branchRequest.getManagerName());
@@ -63,13 +58,15 @@ public class BranchService {
 
         if(branchRequest.getBranchAddress() != null){
             if(branch.getAddress() == null){
+                // Create new address
                 Address newAddress = addressMapper.toEntity(branchRequest.getBranchAddress());
                 branch.setAddress(newAddress);
                 // newAddress.setBranch(branch);
             }
             else{
+                // Update existing address
                 addressMapper.updateAddress(branch.getAddress(), branchRequest.getBranchAddress());
-                branch.getAddress().setBranch(branch);
+                // branch.getAddress().setBranch(branch);
                 // Relationship maintained by @PreUpdate
             }
         }
@@ -79,12 +76,10 @@ public class BranchService {
 
     public BranchResponse getBranchById(Long branchId) {
 
-        Optional<Branch> existingBranch = branchRepository.findById(branchId);
-        if (!existingBranch.isPresent()) {
-            throw new ResourceNotFoundException("Branch not found with id: " + branchId);
-        }
+        Branch branch = branchRepository.findById(branchId)
+        .orElseThrow(()-> new ResourceNotFoundException("Branch not found with id: " + branchId));
 
-        return branchMapper.toBranchResponse(existingBranch.get());
+        return branchMapper.toBranchResponse(branch);
     }
 
     public List<BranchResponse> getAllBranches() {
@@ -96,14 +91,12 @@ public class BranchService {
     }
 
     public void deleteBranch(Long branchId) {
-        Optional<Branch> existingBranch = branchRepository.findById(branchId);
-        if (!existingBranch.isPresent()) {
-            throw new ResourceNotFoundException("Branch not found with id: " + branchId);
 
-        }
+        Branch branch = branchRepository.findById(branchId)
+            .orElseThrow(()-> new ResourceNotFoundException("Branch not found with id: " + branchId));
 
-        if(existingBranch.get().getAddress() != null){
-            existingBranch.get().getAddress().setBranch(null);
+        if(branch.getAddress() != null){
+            branch.getAddress().setBranch(null);
         }
 
         branchRepository.deleteById(branchId);
