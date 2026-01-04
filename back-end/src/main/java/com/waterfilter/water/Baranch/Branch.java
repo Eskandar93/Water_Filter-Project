@@ -30,7 +30,7 @@ public class Branch {
     private String name;
     private String phoneNumber;
     private String managerName;
-    private double coverageRediusKm;
+    private Double coverageRadiusKm;
 
     @OneToOne(mappedBy = "branch", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private Address address;
@@ -68,4 +68,8 @@ public class Branch {
     //         address.setBranch(this);  // This sets the foreign key
     //     }
     // }
+
+    public double getCoverageRadiusKm(){
+        return this.coverageRadiusKm != null ? this.coverageRadiusKm : 3.0;
+    }
 }

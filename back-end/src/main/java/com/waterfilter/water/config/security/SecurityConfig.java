@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 @Configuration // this is a configuration class, meaning it contains @Bean methods
@@ -37,8 +38,8 @@ public class SecurityConfig {
                 .csrf(customizer -> customizer.disable()) // do not use session but use token
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                        .requestMatchers("/api/v1/users/**").permitAll()
-                        // .requestMatchers( "/api/v1/users/register", "/api/v1/users/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/users/register", "/api/v1/users/login").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/users/profile").authenticated()
                         .requestMatchers("/api/v1/users/employees/**", "/api/v1/users/customers/**").hasAnyRole("ADMIN", "HR")
                         .requestMatchers("/api/v1/branches/**", "/api/v1/departments/**", "/api/v1/insurances/**").hasRole("ADMIN")
 

@@ -1,6 +1,8 @@
 package com.waterfilter.water.exception;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -49,6 +51,22 @@ public class GlobalExceptionHandler {
         .build();
 
     return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+  }
+
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<ApiResponse<Void>>handleInvalidOtpException(
+    BusinessException ex, HttpServletRequest request
+  ){
+
+    ApiResponse<Void> response = ApiResponse.<Void>builder()
+        .timestamp(LocalDateTime.now())
+        .status(HttpStatus.BAD_REQUEST.value())
+        .message(ex.getMessage())
+        .data(null)
+        .path(request.getRequestURI())
+        .build();
+
+    return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
   }
 
   // Handle custom InvalidOtpException (your business 400 -> bad request or 401 -> unauthorize) 
@@ -121,6 +139,28 @@ public class GlobalExceptionHandler {
           return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);   
     }
 
+        // Handle invalid location specifically
+        @ExceptionHandler(InvalidLocationException.class)
+    public ResponseEntity<ApiResponse<Map<String, Object>>> handleInvalidLocation(
+                  InvalidLocationException ex,
+                  HttpServletRequest request){
+
+                    Map<String, Object>errorDetails = new HashMap<>();
+                    errorDetails.put("distance", ex.getDistance());
+                    errorDetails.put("allowedDistance", ex.getAllowedDistance());
+                    errorDetails.put("Not allowed", "LOCATION_OUT_OF_RANGE");
+
+                    ApiResponse<Map<String, Object>> response = ApiResponse.<Map<String, Object>>builder()
+                    .timestamp(LocalDateTime.now())
+                    .status(HttpStatus.BAD_REQUEST.value())
+                    .message(ex.getMessage())
+                    .data(errorDetails)
+                    .path(request.getRequestURI())
+                    .build();
+
+          return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);   
+    }
+
         // Handle 405 - Wrong HTTP method
         // EX. HTTP method is get and you use the endpoint as it have a post endpoint
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
@@ -140,6 +180,7 @@ public class GlobalExceptionHandler {
 
          return new ResponseEntity<>(response, HttpStatus.METHOD_NOT_ALLOWED);
       }
+      
 
       // Catch-all for any other unexpected exceptions (500 Internal Server Error)
           @ExceptionHandler(Exception.class)

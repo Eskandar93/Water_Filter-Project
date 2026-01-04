@@ -17,5 +17,26 @@ public class LocationValidationResponse {
 
     private boolean isValid;
     private String message;
+    private Double distance;
+    private Double allowedDistance;
     private LocalDateTime timestamp;
+
+    public static LocationValidationResponse success (String message, double distance, double allowedDistance){
+        return LocationValidationResponse.builder()
+        .isValid(true)
+        .message(message)
+        .distance(distance)
+        .allowedDistance(allowedDistance)
+        .timestamp(LocalDateTime.now())
+        .build();
+    }
+
+    public static LocationValidationResponse error (String message){
+        return LocationValidationResponse.builder()
+        .isValid(false)
+        .message(message)
+        .timestamp(LocalDateTime.now())
+        .build();
+    }
+
 }

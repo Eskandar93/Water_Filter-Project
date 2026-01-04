@@ -11,7 +11,7 @@ public class BranchMapper {
                 .name(branch.getName())
                 .phoneNumber(branch.getPhoneNumber())
                 .managerName(branch.getManagerName())
-                .coverageRediusKm(branch.getCoverageRediusKm())
+                .coverageRediusKm(branch.getCoverageRadiusKm())
                 .build();
     }
 

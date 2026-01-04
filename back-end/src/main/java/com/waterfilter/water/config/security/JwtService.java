@@ -5,8 +5,12 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+
+import com.waterfilter.water.employee.Employee;
+import com.waterfilter.water.user.Users;
 
 // import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
@@ -15,8 +19,10 @@ import javax.crypto.SecretKey;
 // import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class JwtService {
@@ -41,27 +47,29 @@ public class JwtService {
         this.secretKey = secretKey;
     }
 
-    public String generateToken(String username) {
+    public String generateToken(UserDetails userDetails) {
 
         Map<String, Object> claims = new HashMap<>();
         // Store authorities in the right format
-    // List<Map<String, String>> authoritiesList = userDetails.getAuthorities().stream()
-    //     .map(auth -> {
-    //         Map<String, String> authMap = new HashMap<>();
-    //         authMap.put("authority", auth.getAuthority());
-    //         return authMap;
-    //     })
-    //     .collect(Collectors.toList());
-    
-    // claims.put("authorities", authoritiesList);
-        // claims.put("authorities", userDetails.getAuthorities()); // ✅ THIS IS IMPORTANT!
+
+        if(userDetails instanceof Users || userDetails instanceof Employee){
+
+            Users user = (Users) userDetails;
+            claims.put("userId", user.getId());
+        }
+        
+        claims.put("authorities", 
+            userDetails.getAuthorities().stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .collect(Collectors.toList())
+            ); 
 
         return Jwts.builder()
                 .claims()
                 .add(claims)
-                .subject(username)
+                .subject(userDetails.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 60 * 60 * 30*5 *20))
+                .expiration(new Date(System.currentTimeMillis() + 6 * 60 * 60 * 1000))
                 .and()
                 .signWith(getKey())
                 .compact();
@@ -74,6 +82,17 @@ public class JwtService {
 
     public String extractUserName(String token) {
         return extractClaims(token, Claims::getSubject);
+    }
+
+    // extract user ID
+    public Long extractUserId(String token){
+        return extractClaims(token, claims -> claims.get("userId", Long.class));
+    }
+
+    // extract user authorities of user
+    @SuppressWarnings("unchecked")
+    public List<String> extractAuthorities(String token){
+        return extractClaims(token, claims -> claims.get("authorities", List.class));
     }
 
     private <T> T extractClaims(String token, Function<Claims, T> claimResolver) {
@@ -101,36 +120,4 @@ public class JwtService {
         return extractClaims(token, Claims::getExpiration);
     }
 
-    //     // Add this method to extract authorities from token
-    // public Collection<? extends GrantedAuthority> extractAuthorities(String token) {
-    //     Claims claims = extractAllClaims(token);
-    //     Object authoritiesObj = claims.get("authorities");
-        
-    //     if (authoritiesObj == null) {
-    //         return Collections.emptyList();
-    //     }
-        
-    //     System.out.println("DEBUG: Authorities from token (raw): " + authoritiesObj);
-    //     System.out.println("DEBUG: Authorities class: " + authoritiesObj.getClass());
-        
-    //     List<GrantedAuthority> authorities = new ArrayList<>();
-        
-    //     if (authoritiesObj instanceof List) {
-    //         List<?> list = (List<?>) authoritiesObj;
-    //         for (Object obj : list) {
-    //             if (obj instanceof Map) {
-    //                 Map<?, ?> map = (Map<?, ?>) obj;
-    //                 Object authority = map.get("authority");
-    //                 if (authority instanceof String) {
-    //                     authorities.add(new SimpleGrantedAuthority((String) authority));
-    //                 }
-    //             } else if (obj instanceof String) {
-    //                 authorities.add(new SimpleGrantedAuthority((String) obj));
-    //             }
-    //         }
-    //     }
-        
-    //     System.out.println("DEBUG: Parsed authorities: " + authorities);
-    //     return authorities;
-    // }
 }

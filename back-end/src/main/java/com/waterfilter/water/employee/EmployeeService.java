@@ -87,7 +87,7 @@ public class EmployeeService {
     public void updateEmployee(Long oldEmployeeId, EmployeeRequest employeeRequest) {
 
         Employee exsistingEmployee = employeeRepository.findById(oldEmployeeId)
-        .orElseThrow(() -> new ResourceNotFoundException("Employee with id: " + oldEmployeeId + " not exist"));
+        .orElseThrow(() -> new ResourceNotFoundException("Employee with id: " + oldEmployeeId + " not found"));
         
         // Validate unique fields (if changed)
         validateUniqueFields(exsistingEmployee, employeeRequest);
@@ -234,4 +234,5 @@ public class EmployeeService {
         }
         employeeRepository.deleteById(employeeId);
     }
+
 }

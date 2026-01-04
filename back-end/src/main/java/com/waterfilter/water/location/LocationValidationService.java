@@ -3,11 +3,11 @@ package com.waterfilter.water.location;
 import org.springframework.stereotype.Service;
 
 import com.waterfilter.water.Baranch.Branch;
-import com.waterfilter.water.Baranch.BranchRepository;
 import com.waterfilter.water.address.Address;
-import com.waterfilter.water.address.AddressRepository;
 import com.waterfilter.water.employee.Employee;
 import com.waterfilter.water.employee.EmployeeRepository;
+import com.waterfilter.water.exception.BusinessException;
+import com.waterfilter.water.exception.InvalidLocationException;
 import com.waterfilter.water.exception.ResourceNotFoundException;
 
 import lombok.RequiredArgsConstructor;
@@ -17,48 +17,71 @@ import lombok.RequiredArgsConstructor;
 public class LocationValidationService {
 
   private final LocationService locationService;
-  private final LocationMapper locationMapper;
-  private final AddressRepository addressRepository;
   private final EmployeeRepository employeeRepository;
 
-  public LocationValidationResponse isEmployeeWithinBranchCoverage(LocationValidationRequest request){
+  public LocationValidationResponse validateEmployeeLocation(LocationValidationRequest request){
 
-    Employee employee = employeeRepository.findById(request.getEmployeeId())
-        .orElseThrow(() -> new ResourceNotFoundException("Employee with id: " + request.getEmployeeId() + " not exist"));
+    Employee employee = findEmployee(request.getEmployeeId());
 
+    Branch branch = validateBranchAssignment(employee);
+
+    Address branchAddress = validateBranchAddress(branch);
+
+    Location branchLocation = validateBranchLocation(branchAddress);
+
+    double coverageRadius = branch.getCoverageRadiusKm();
+
+    Double distance = calculateDistance(request, branchLocation);
+
+    validateDistance(distance, coverageRadius, branch.getName());
+
+    return LocationValidationResponse.success("Location validated successfully.", distance, coverageRadius);
+  }
+
+    private Employee findEmployee(Long employeeId){
+    return employeeRepository.findById(employeeId)
+        .orElseThrow(() -> new ResourceNotFoundException("Employee with id: " + employeeId + " not exist"));
+  }
+
+  private Branch validateBranchAssignment(Employee employee){
+    
     Branch branch = employee.getEmployeeBranch();
     if(branch == null){
-        return locationMapper.locationValidationFaild("Employee is not assigned to any branch");
+        throw new BusinessException("Employee is not assigned to any branch");
     }
+    return branch;
+  }
 
-    Address branchAddress = branch.getAddress();
-    if(branchAddress == null){
-        return locationMapper.locationValidationFaild("Branch  is not configured to any address");
+  private Address validateBranchAddress(Branch branch){
+     Address address = branch.getAddress();
+    if(address == null){
+        throw new BusinessException("Branch  is not configured to any address");
     }
+    return address;
+  }
 
-    Location locationAddress = branchAddress.getLocation();
-      if(locationAddress == null){
-        return locationMapper.locationValidationFaild("Branch address is not configured to any location");
+  private Location validateBranchLocation(Address address){
+      Location location = address.getLocation();
+      if(location == null || location.getLatitude() == null || location.getLongitude() == null){
+        throw new BusinessException("Branch address is not configured to any location");
     }
+    return location;
+  }
 
-    double coverageRadius = branch.getCoverageRediusKm(); 
-    
-    // Calculate distance between request location and branch
-    boolean isValid = addressRepository.isEmployeeWithinBranchCoverageNative(request.getEmployeeId(), request.getLatitude(), request.getLongitude(), coverageRadius);
-    double distance = 0.0;
-    
-    if(!isValid){
-       distance = locationService.calculateDistance(request.getLatitude(), request.getLongitude(), locationAddress.getLatitude(), locationAddress.getLongitude());
-    }
+  private double calculateDistance(LocationValidationRequest request, Location branchLocation){
+    return locationService.calculateDistance(request.getLatitude(), request.getLongitude(), branchLocation.getLatitude(), branchLocation.getLongitude());
+  }
 
-    if(isValid == false || distance > coverageRadius){
-      return locationMapper.locationValidationFaild(
+  private void validateDistance(double distance, double coverageRadius, String branchName){
+        if(distance > coverageRadius){
+      throw new InvalidLocationException(
                     String.format(
                       "You are %.2f km away from %s. Maximum allowed distance: %.2f km",
-                      distance, branch.getName(), coverageRadius
-                    ));
+                      distance, branchName, coverageRadius
+                    ), 
+                      distance, 
+                      coverageRadius
+                    );
     }
-
-    return locationMapper.locationValidationSuccess("Location validated successfully. You can now register attendance.");
   }
 }

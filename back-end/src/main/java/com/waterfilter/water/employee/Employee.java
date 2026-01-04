@@ -14,6 +14,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -46,6 +47,8 @@ public class Employee extends Users {
     private String employeeCode;
     private LocalDate hireDate;
     private BigDecimal salary;
+    private LocalDateTime lastLogin;
+    private boolean isActive;
 
     // One user can have multiple addresses
     @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

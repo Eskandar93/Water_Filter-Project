@@ -1,7 +1,9 @@
 package com.waterfilter.water.user;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,13 +27,10 @@ public class UserController {
   }
 
   @PostMapping("login")
-  public ResponseEntity<ApiResponse<String>> login(@RequestBody UserLoginRequest request){
-    String token = userService.verifyUser(request);
-    ApiResponse<String> response = ApiResponse.success(token, "Login successfully");
-    return ResponseEntity.ok(response);
+  public ResponseEntity<ApiResponse<LoginResponse>> login(@RequestBody UserLoginRequest request){
+    LoginResponse response = userService.login(request);
+    ApiResponse<LoginResponse> apiResponse = ApiResponse.success(response, "Login successfully");
+    return ResponseEntity.ok(apiResponse);
   }
 
-
-
-  // get user profile
 }

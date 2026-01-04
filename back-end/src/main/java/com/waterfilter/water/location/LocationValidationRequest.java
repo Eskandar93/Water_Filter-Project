@@ -1,6 +1,5 @@
 package com.waterfilter.water.location;
 
-import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,7 +11,6 @@ import lombok.NoArgsConstructor;
 public class LocationValidationRequest {
 
   private Long employeeId;
-  private double latitude;
-  private double longitude;
-  private LocalDateTime locationTimestamp;
+  private Double latitude;
+  private Double longitude;
 }

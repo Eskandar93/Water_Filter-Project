@@ -18,10 +18,10 @@ public class LocationController {
   private final LocationValidationService locationValidationService;
 
   @PostMapping("validate-employee-location")
-  public ResponseEntity<ApiResponse<LocationValidationResponse>> NearbyAddresses(@RequestBody LocationValidationRequest request){
-    LocationValidationResponse locationValidationResponse = locationValidationService.isEmployeeWithinBranchCoverage(request);
-    ApiResponse<LocationValidationResponse> response = ApiResponse.success(locationValidationResponse, "Valid Location");
-    return ResponseEntity.ok(response);
+  public ResponseEntity<ApiResponse<LocationValidationResponse>> validateEmployeeLocation(@RequestBody LocationValidationRequest request){
+    LocationValidationResponse response = locationValidationService.validateEmployeeLocation(request);
+    ApiResponse<LocationValidationResponse> apiResponse = ApiResponse.success(response, response.getMessage());
+    return ResponseEntity.ok(apiResponse);
   }
   
 }

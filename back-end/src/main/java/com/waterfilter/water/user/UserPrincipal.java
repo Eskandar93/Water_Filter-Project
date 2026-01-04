@@ -4,9 +4,12 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import lombok.Getter;
+
 import java.util.Collection;
 import java.util.Collections;
 
+@Getter
 public class UserPrincipal implements UserDetails {
 
     private Users user;

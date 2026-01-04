@@ -37,7 +37,7 @@ public class BranchService {
         branch.setName(branchRequest.getName());
         branch.setPhoneNumber(branchRequest.getPhoneNumber());
         branch.setManagerName(branchRequest.getManagerName());
-        branch.setCoverageRediusKm(branchRequest.getCoverageRediusKm());
+        branch.setCoverageRadiusKm(branchRequest.getCoverageRediusKm());
 
         if(branchRequest.getBranchAddress() != null) {
               Address address = addressMapper.toEntity(branchRequest.getBranchAddress());
@@ -54,7 +54,7 @@ public class BranchService {
         branch.setName(branchRequest.getName());
         branch.setPhoneNumber(branchRequest.getPhoneNumber());
         branch.setManagerName(branchRequest.getManagerName());
-        branch.setCoverageRediusKm(branchRequest.getCoverageRediusKm());
+        branch.setCoverageRadiusKm(branchRequest.getCoverageRediusKm());
 
 
         //branch.setAddress(addressMapper.toEntity(branchRequest.getBranchAddress()));
