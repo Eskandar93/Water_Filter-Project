@@ -17,14 +17,14 @@ public class CustomerController {
     private final CustomerService customerService;
 
      @PostMapping("addCustomer")
-  public ResponseEntity<ApiResponse<CustomerResponse>> addEmployee(@RequestBody CustomerRequest customerRequest){
+  public ResponseEntity<ApiResponse<CustomerResponse>> addCustomer(@RequestBody CustomerRequest customerRequest){
     CustomerResponse customerResponse = customerService.addCustomer(customerRequest);
     ApiResponse<CustomerResponse> response = ApiResponse.created(customerResponse, " Customer added successfully");
     return ResponseEntity.ok(response);
   }
 
   @PutMapping("updateCustome/{oldPhoneNumber}")
-  public ResponseEntity<ApiResponse<String>> updateEmployee(@PathVariable String oldPhoneNumber, @RequestBody CustomerRequest customerRequest){
+  public ResponseEntity<ApiResponse<String>> updateCustomer(@PathVariable String oldPhoneNumber, @RequestBody CustomerRequest customerRequest){
     customerService.updateCustomer(oldPhoneNumber, customerRequest);
     ApiResponse<String> response = ApiResponse.success("Customer updated successfully");
     return ResponseEntity.ok(response);
