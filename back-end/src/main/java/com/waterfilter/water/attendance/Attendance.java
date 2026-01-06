@@ -45,10 +45,10 @@ public class Attendance extends BaseAuditingEntity{
   private LocalDate attendanceDate;
 
   @Enumerated(EnumType.STRING)
-  private AttendanceStatus attendanceStatus = AttendanceStatus.PRESENT;
+  private AttendanceStatus attendanceStatus;
 
   @Enumerated(EnumType.STRING)
-  private AttendanceStatusEvaluation attendanceStatusEvaluation = AttendanceStatusEvaluation.ON_TIME; // "ON_TIME", "LATE"
+  private AttendanceStatusEvaluation attendanceStatusEvaluation; // "ON_TIME", "LATE"
   
   private String ipAddress;
   private String deviceId;

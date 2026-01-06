@@ -16,9 +16,9 @@ public class BranchController {
     private final BranchService branchService;
 
     @PostMapping("addBranch")
-    public ResponseEntity<ApiResponse<String>> addBranch(@RequestBody BranchRequest branchRequest){
-        branchService.addBranch(branchRequest);
-        ApiResponse<String> response = ApiResponse.created("Branch added successfully");
+    public ResponseEntity<ApiResponse<BranchResponse>> addBranch(@RequestBody BranchRequest branchRequest){
+        BranchResponse branchResponse = branchService.addBranch(branchRequest);
+        ApiResponse<BranchResponse> response = ApiResponse.created(branchResponse, " Branch added successfully");
         return ResponseEntity.ok(response);
     }
 

@@ -25,9 +25,9 @@ public class DepartmentController {
 
   private final DepartmentService departmentService;
   @PostMapping("addDepartment")
-  public ResponseEntity<ApiResponse<String>> addDepartment(@RequestBody DepartmentRequest departmentrequest){
-    departmentService.addDepartment(departmentrequest);
-    ApiResponse<String> response = ApiResponse.created("Department added successfully");
+  public ResponseEntity<ApiResponse<DepartmentResponse>> addDepartment(@RequestBody DepartmentRequest departmentrequest){
+    DepartmentResponse departmentResponse = departmentService.addDepartment(departmentrequest);
+    ApiResponse<DepartmentResponse> response = ApiResponse.created(departmentResponse, " Department added successfully");
     return ResponseEntity.ok(response);
   }
 

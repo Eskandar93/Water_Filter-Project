@@ -11,6 +11,7 @@ import lombok.*;
 @NoArgsConstructor
 public class AddressResponse {
 
+    private Long id;
     private String government;
     private String city;
     private String postalCode;

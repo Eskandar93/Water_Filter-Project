@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 public class BranchResponse {
 
-    private Long branchId;
+    private Long id;
     private String name;
     private String phoneNumber;
     private String managerName;

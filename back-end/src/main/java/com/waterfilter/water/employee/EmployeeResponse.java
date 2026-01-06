@@ -15,7 +15,7 @@ import com.waterfilter.water.user.UserType;
 @NoArgsConstructor
 public class EmployeeResponse {
 
-    private Long employeeId;
+    private Long id;
     private String firstName;
     private String lastName;
     private String username;

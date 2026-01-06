@@ -13,6 +13,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class InsuranceResponse {
 
-  private Long insuranceId;
+  private Long id;
   private InsuranceType insuranceType;
 }

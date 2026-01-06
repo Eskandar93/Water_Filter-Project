@@ -11,7 +11,10 @@ import lombok.RequiredArgsConstructor;
 public class AddressMapper {
     private final LocationMapper locationMapper;
     public AddressResponse toAddressResponse(Address address) {
+        if (address == null) return null;
+            
         return AddressResponse.builder()
+                .id(address.getAddressId())
                 .government(address.getGovernment())
                 .city(address.getCity())
                 .postalCode(address.getPostalCode())

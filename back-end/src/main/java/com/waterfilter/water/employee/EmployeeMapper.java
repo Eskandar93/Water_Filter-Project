@@ -14,7 +14,7 @@ public class EmployeeMapper {
     private final PasswordEncoder passwordEncoder;
     public EmployeeResponse toEmployeeResponse(Employee employee) {
         return EmployeeResponse.builder()
-                .employeeId(employee.getId())
+                .id(employee.getId())
                 .firstName(employee.getFirstName())
                 .lastName(employee.getLastName())
                 .email(employee.getEmail())

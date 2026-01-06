@@ -38,11 +38,17 @@ public class SecurityConfig {
                 .csrf(customizer -> customizer.disable()) // do not use session but use token
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/v1/users/register", "/api/v1/users/login").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/users/profile").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/users/register", "/api/v1/users/login", "/api/v1/otps/**", "/api/v1/passwords/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/users/profile", "/api/v1/locations/").authenticated()
                         .requestMatchers("/api/v1/users/employees/**", "/api/v1/users/customers/**").hasAnyRole("ADMIN", "HR")
-                        .requestMatchers("/api/v1/branches/**", "/api/v1/departments/**", "/api/v1/insurances/**").hasRole("ADMIN")
-
+                        .requestMatchers("/api/v1/branches/**", "/api/v1/departments/**", "/api/v1/insurances/**").hasAnyRole("ADMIN", "MANAGER")
+                        .requestMatchers(HttpMethod.POST, 
+                        "/api/v1/otps/resend-otp",
+                        "/api/v1/otps/verify",
+                        "/api/v1/passwords/forgot-password",
+                        "/api/v1/passwords/reset-password"
+                    ).permitAll()
+                    
                         .anyRequest().authenticated()) // no one can access the page without authentication
                 //.formLogin(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults())

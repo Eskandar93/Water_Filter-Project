@@ -19,7 +19,7 @@ public class BranchService {
     private final BranchMapper branchMapper;
     private final AddressMapper addressMapper;
 
-    public void addBranch(BranchRequest branchRequest) {
+    public BranchResponse addBranch(BranchRequest branchRequest) {
 
         if(branchRepository.findByName(branchRequest.getName()).isPresent()){
             throw new DublicateResourceException("This Branch has name: " +
@@ -45,6 +45,7 @@ public class BranchService {
         }
 
         branchRepository.save(branch);
+        return branchMapper.toBranchResponse(branch);
     }
     public void updateBranch(Long oldBranchId, BranchRequest branchRequest) {
 

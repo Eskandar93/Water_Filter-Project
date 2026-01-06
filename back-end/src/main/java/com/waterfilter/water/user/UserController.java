@@ -1,9 +1,7 @@
 package com.waterfilter.water.user;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,9 +18,9 @@ public class UserController {
   private final UserService userService;
 
   @PostMapping("register")
-  public ResponseEntity<ApiResponse<String>> register(@RequestBody UserRequest request){
-      userService.register(request);
-      ApiResponse<String> response = ApiResponse.created("User registered successfully");
+  public ResponseEntity<ApiResponse<UserResponse>> register(@RequestBody UserRequest request){
+      UserResponse userResponse = userService.register(request);
+      ApiResponse<UserResponse> response = ApiResponse.created(userResponse, " User registered successfully");
       return ResponseEntity.ok(response);
   }
 

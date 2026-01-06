@@ -21,7 +21,7 @@ public class DepartmentService {
   private final DepartmentMapper departmentMapper;
   private final BranchRepository branchRepository;
 
-  public void addDepartment(DepartmentRequest departmentrequest){
+  public DepartmentResponse addDepartment(DepartmentRequest departmentrequest){
 
     if(departmentRepository.findDepartmentByDepartmentId(departmentrequest.getDepartmentId()).isPresent()){
       throw new DublicateResourceException("Department has id: " + 
@@ -44,6 +44,7 @@ public class DepartmentService {
     department.setBranch(branch.get());
 
     departmentRepository.save(department);
+    return departmentMapper.toDepartmentResponse(department);
   }
 
     // update

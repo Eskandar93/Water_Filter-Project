@@ -39,15 +39,14 @@ public class ApiResponse<T> {
           .build();
   }
   
-  public static <T> ApiResponse<T> created(T data){
+  public static <T> ApiResponse<T> created(T data,  String message){
     return ApiResponse.<T>builder()
           .timestamp(LocalDateTime.now())
           .status(HttpStatus.OK.value())
-          .message("Created successfully")
+          .message(message)
           .data(data)
           .build();
   }
-
 
     public static ApiResponse<Void> error(HttpStatus status, String message){
     return ApiResponse.<Void>builder()

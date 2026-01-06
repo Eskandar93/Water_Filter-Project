@@ -24,9 +24,9 @@ public class InsuranceController {
   private final InsuranceService insuranceService;
 
   @PostMapping("addInsurance")
-  public ResponseEntity<ApiResponse<String>> addInsurance(@RequestBody InsuranceRequest insuranceRequest){
-    insuranceService.addInsurance(insuranceRequest);
-    ApiResponse<String> response = ApiResponse.created("Insurance added successfully");
+  public ResponseEntity<ApiResponse<InsuranceResponse>> addInsurance(@RequestBody InsuranceRequest insuranceRequest){
+    InsuranceResponse insuranceResponse = insuranceService.addInsurance(insuranceRequest);
+    ApiResponse<InsuranceResponse> response = ApiResponse.created(insuranceResponse, " Insurance added successfully");
     return ResponseEntity.ok(response);
   }
 

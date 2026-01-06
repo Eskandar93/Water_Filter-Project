@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 public class InsuranceMapper {
   public InsuranceResponse toInsuranceResponse(Insurance insurance){
     return InsuranceResponse.builder()
-      .insuranceId(insurance.getInsuranceId())
+      .id(insurance.getInsuranceId())
       .insuranceType(insurance.getInsuranceType())
       .build();
   }

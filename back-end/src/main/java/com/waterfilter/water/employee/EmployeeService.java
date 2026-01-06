@@ -16,7 +16,6 @@ import com.waterfilter.water.exception.DublicateResourceException;
 import com.waterfilter.water.exception.ResourceNotFoundException;
 import com.waterfilter.water.insurance.Insurance;
 import com.waterfilter.water.insurance.InsuranceRepository;
-import com.waterfilter.water.user.UserRole;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,12 +35,12 @@ public class EmployeeService {
 //    private final PasswordEncoder passwordEncoder;
 
     // add
-    public void addEmployee(EmployeeRequest employeeRequest) {
+    public EmployeeResponse addEmployee(EmployeeRequest employeeRequest) {
 
         // verify token to allow employee for access end-point By role
         // unauth , unautorize
         if (employeeRepository.findByEmail(employeeRequest.getEmail()).isPresent()) {
-            throw new RuntimeException("Employee already exists");
+            throw new DublicateResourceException("Employee has email: " + employeeRequest.getEmail() + "already exists");
         }
 
         Employee employee = employeeMapper.toEntity(employeeRequest);
@@ -50,6 +49,7 @@ public class EmployeeService {
         setEmployeeRelationships(employee, employeeRequest);
 
         employeeRepository.save(employee);
+        return employeeMapper.toEmployeeResponse(employee);
     }
 
     private void setEmployeeRelationships(Employee employee, EmployeeRequest employeeRequest){
@@ -79,7 +79,7 @@ public class EmployeeService {
         }
         
         // set salary to employee
-        if(employeeRequest.getSalary() != null && employeeRequest.getRole() == UserRole.ADMIN){
+        if(employeeRequest.getSalary() != null){
             employee.setSalary(employeeRequest.getSalary());
         }
     }
@@ -166,7 +166,7 @@ public class EmployeeService {
         // Update department
         if(employeeRequest.getDepartmentId() != null){
             Department department = departmentRepository.findDepartmentByDepartmentId(employeeRequest.getDepartmentId())
-            .orElseThrow(() -> new ResourceNotFoundException("Branch with Id: " + employeeRequest.getBranchId() + " not exist"));
+            .orElseThrow(() -> new ResourceNotFoundException("Department with Id: " + employeeRequest.getDepartmentId() + " not exist"));
 
             exsistingEmployee.setDepartment(department);
         }

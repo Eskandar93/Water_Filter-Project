@@ -3,70 +3,155 @@ package com.waterfilter.water.customer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import com.waterfilter.water.Baranch.Branch;
+import com.waterfilter.water.Baranch.BranchRepository;
+import com.waterfilter.water.address.Address;
+import com.waterfilter.water.address.AddressMapper;
+import com.waterfilter.water.address.AddressRequest;
+import com.waterfilter.water.exception.DublicateResourceException;
+import com.waterfilter.water.exception.ResourceNotFoundException;
+
+import jakarta.transaction.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class CustomerService {
 
     private final CustomerRepository customerRepository;
+    private final BranchRepository branchRepository;
     private final CustomerMapper customerMapper;
+    private final AddressMapper addressMapper;
 
-    public void addCustomer(CustomerRequest customer) {
+    // with add should return respone to best api design
+    @Transactional
+    public CustomerResponse addCustomer(CustomerRequest request) {
 
-        Optional<Customer> existingCustomer = customerRepository.findCustomerByPhoneNumber(customer.getPhoneNumber());
-        if (existingCustomer.isPresent()) {
-            throw new RuntimeException("this customer already exists");
-        }
+        validateUniqueness(request);
 
-        Customer cu = new Customer();
-        cu.setFirstName(customer.getFirstName());
-        cu.setMiddleName(customer.getMiddleName());
-        cu.setLastName(customer.getLastName());
-        cu.setPhoneNumber(customer.getPhoneNumber());
-        cu.setCustomerAddresses(customer.getAddresses());
+        Customer customer = customerMapper.toEntity(request);
+        
+        setCustomerRelationship(customer, request);
 
-        // check branch is exist or not by id
-        // set branch
-        //cu.setBranch(customer.getBranch());
-
-        customerRepository.save(cu);
+        customerRepository.save(customer);
+        return customerMapper.toCustomerResponse(customer);
     }
 
-    public void updateCustomer(CustomerRequest customer) {
+     private void validateUniqueness(CustomerRequest request){
 
-        Optional<Customer> existingCustomer = customerRepository.findCustomerByTotalName(customer.getFirstName(), customer.getMiddleName(), customer.getLastName());
+        if (customerRepository.findCustomerByPhoneNumber(request.getPhoneNumber()).isPresent()) {
+            throw new DublicateResourceException("Customer has phone number: " + request.getPhoneNumber() + " already exists");
+        }
+     }
 
-        if(!existingCustomer.isPresent()){
-            throw new RuntimeException("This Customer not found");
+    private void setCustomerRelationship(Customer customer, CustomerRequest request) {
+
+            // AddressRequest addressRequest = request.getAddress();
+        if(request != null && request.getAddress() != null){
+
+            Address address = addressMapper.toEntity(request.getAddress());
+             address.setCustomer(customer);
+            customer.setAddress(address);
         }
 
-        else {
-            Customer curCustomer = existingCustomer.get();
+        if(request.getBranchId() != null){
+            Branch branch = branchRepository.findBranchByBranchId(request.getBranchId())
+            .orElseThrow(() -> new ResourceNotFoundException("Branch with id " + request.getBranchId() + " not found"));
 
-            if(curCustomer.getPhoneNumber().equals(customer.getPhoneNumber())) {
-
-                curCustomer.setFirstName(customer.getFirstName());
-                curCustomer.setMiddleName(customer.getMiddleName());
-                curCustomer.setLastName(customer.getLastName());
-                curCustomer.setPhoneNumber(customer.getPhoneNumber());
-                curCustomer.setCustomerAddresses(customer.getAddresses());
-                // check branch is exist or not by id
-                // set branch
-               // curCustomer.setBranch(customer.getBranch());
-                customerRepository.save(curCustomer);
-            }
+            customer.setCustomerBranch(branch);
         }
     }
 
-    public CustomerResponse getCustomer(String phoneNumber) {
-        Optional<Customer> customer = customerRepository.findCustomerByPhoneNumber(phoneNumber);
+    // update
+    public void updateCustomer(String phoneNumber, CustomerRequest request){
+           Customer customer = customerRepository.findCustomerByPhoneNumber(phoneNumber)
+        .orElseThrow(() -> new ResourceNotFoundException("Customer has phone number: " + phoneNumber + " not exist"));
 
-        if(!customer.isPresent()){
-            throw new RuntimeException("Customer not found with phone: " + phoneNumber);
-        }
+        validateUniqueFields(customer, request);
+        updateBasicFields(customer, request);
+        updateRelationships(customer, request);
 
-        return customerMapper.toCustomerResponse(customer.get());
+        customerRepository.save(customer);
     }
 
+    private void updateRelationships(Customer customer, CustomerRequest request) {
+        if(request.getAddress() != null){
+            updateAddress(customer, request.getAddress());
+        }
+
+        if(request.getBranchId() != null){
+                 Branch branch = branchRepository.findBranchByBranchId(request.getBranchId())
+            .orElseThrow(() -> new ResourceNotFoundException("Branch with Id: " + request.getBranchId() + " not exist"));
+
+            customer.setCustomerBranch(branch);
+        }
+
+    }
+
+    private void updateAddress(Customer customer, AddressRequest addressRequest) {
+        Address existingAddress = customer.getAddress();
+        if(existingAddress == null){
+            Address address = addressMapper.toEntity(addressRequest);
+            customer.setAddress(address);
+        } else {
+            addressMapper.updateAddress(existingAddress, addressRequest);
+        }
+    }
+
+    private void updateBasicFields(Customer customer, CustomerRequest request) {
+        if(request.getFirstName() != null) customer.setFirstName(request.getFirstName());
+        if(request.getMiddleName() != null) customer.setMiddleName(request.getMiddleName());
+        if(request.getLastName() != null) customer.setLastName(request.getLastName());
+        if(request.getEmail() != null) customer.setEmail(request.getEmail());
+        if(request.getPhoneNumber() != null) customer.setPhoneNumber(request.getPhoneNumber());
+    }
+
+    private void validateUniqueFields(Customer customer, CustomerRequest request) {
+
+        if(request.getEmail() != null && !customer.getEmail().equals(request.getEmail())){
+            customerRepository.findCustomerByEmail(request.getEmail()).ifPresent(
+                cust -> {
+                    if(!cust.getCustomerId().equals(customer.getCustomerId())){
+                        throw new DublicateResourceException("Email already in use: " + request.getEmail());
+                    }
+                }
+            );
+        }
+
+        if(request.getPhoneNumber() != null && !customer.getPhoneNumber().equals(request.getPhoneNumber())){
+            customerRepository.findCustomerByPhoneNumber(request.getPhoneNumber()).ifPresent(
+                cust -> {
+                    if(!cust.getCustomerId().equals(customer.getCustomerId())){
+                        throw new DublicateResourceException("Phone Number already in use: " + request.getPhoneNumber());
+                    }
+                }
+            );
+        }
+    }
+
+      // find customer By Phone Number
+      public CustomerResponse getCustomerByPhoneNumber(String phoneNumber){
+        Customer customer = customerRepository.findCustomerByPhoneNumber(phoneNumber)
+        .orElseThrow(() -> new ResourceNotFoundException("Customer has phone number: " + phoneNumber + " not exist"));
+
+        return customerMapper.toCustomerResponse(customer);
+    }
+
+    // find all customers
+    public List<CustomerResponse> getAllCustomers(){
+        List<Customer> customers = customerRepository.findAll();
+        return customers.stream()
+                            .map(customerMapper::toCustomerResponse)
+                            .collect(Collectors.toList());
+    }
+
+    // delete customers by phone number
+       public void deleteCustomerByPhoneNumber(String phoneNumber){
+        Customer customer = customerRepository.findCustomerByPhoneNumber(phoneNumber)
+        .orElseThrow(() -> new ResourceNotFoundException("Customer has phone number: " + phoneNumber + " not exist"));
+
+        customerRepository.deleteById(customer.getCustomerId());
+    }
 }

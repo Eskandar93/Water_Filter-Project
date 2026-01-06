@@ -18,7 +18,7 @@ public class InsuranceService {
   private final InsuranceMapper insuranceMapper;
 
   @Transactional
-  public void addInsurance(InsuranceRequest insuranceRequest){
+  public InsuranceResponse addInsurance(InsuranceRequest insuranceRequest){
     
     if(insuranceRepository.findInsuranceByInsuranceType(insuranceRequest.getInsuranceType()).isPresent()){
       throw new DublicateResourceException("Insurance has type " + insuranceRequest.getInsuranceType() + " already exist");
@@ -28,6 +28,7 @@ public class InsuranceService {
     insurance.setInsuranceType(insuranceRequest.getInsuranceType());
 
     insuranceRepository.save(insurance);
+    return insuranceMapper.toInsuranceResponse(insurance);
   }
 
   // update

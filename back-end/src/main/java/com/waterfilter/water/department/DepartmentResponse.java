@@ -13,7 +13,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class DepartmentResponse {
 
-    private Long departmentId;
+    private Long id;
     private String name;
     private Long branchId;
 }

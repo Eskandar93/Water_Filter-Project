@@ -1,9 +1,13 @@
 package com.waterfilter.water.customer;
 
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
+
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import com.waterfilter.water.apiResponse.ApiResponse;
 
 @RestController
 @AllArgsConstructor
@@ -12,20 +16,38 @@ public class CustomerController {
 
     private final CustomerService customerService;
 
-    @PostMapping("addCustomer")
-    public ResponseEntity<?> addCustomer(@RequestBody CustomerRequest customer){
-        customerService.addCustomer(customer);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Customer added successfully.");
-    }
+     @PostMapping("addCustomer")
+  public ResponseEntity<ApiResponse<CustomerResponse>> addEmployee(@RequestBody CustomerRequest customerRequest){
+    CustomerResponse customerResponse = customerService.addCustomer(customerRequest);
+    ApiResponse<CustomerResponse> response = ApiResponse.created(customerResponse, " Customer added successfully");
+    return ResponseEntity.ok(response);
+  }
 
-    @PutMapping("updateCustomer")
-    public ResponseEntity<String> updateCustomer(@RequestBody CustomerRequest customer){
-        customerService.updateCustomer(customer);
-        return ResponseEntity.ok("Customer updated successfully.");
-    }
+  @PutMapping("updateCustome/{oldPhoneNumber}")
+  public ResponseEntity<ApiResponse<String>> updateEmployee(@PathVariable String oldPhoneNumber, @RequestBody CustomerRequest customerRequest){
+    customerService.updateCustomer(oldPhoneNumber, customerRequest);
+    ApiResponse<String> response = ApiResponse.success("Customer updated successfully");
+    return ResponseEntity.ok(response);
+  }
 
-    @GetMapping("getCustomer/{phoneNumber}")
-    public ResponseEntity<CustomerResponse> getCustomer(@PathVariable String phoneNumber){
-        return ResponseEntity.ok(customerService.getCustomer(phoneNumber));
-    }
+  @GetMapping("getCustomerByPhoneNumber/{phoneNumber}")
+  public ResponseEntity<ApiResponse<CustomerResponse>> getCustomerByPhoneNumber(@RequestParam String phoneNumber){
+    CustomerResponse customerResponse = customerService.getCustomerByPhoneNumber(phoneNumber);
+    ApiResponse<CustomerResponse> response = ApiResponse.success(customerResponse);
+    return ResponseEntity.ok(response);
+  }
+
+  @GetMapping("getAllCustomers")
+  public ResponseEntity<ApiResponse<List<CustomerResponse>>> getAllCustomers(){
+    List<CustomerResponse> customerResponses = customerService.getAllCustomers();
+    ApiResponse<List<CustomerResponse>> response = ApiResponse.success(customerResponses);
+    return ResponseEntity.ok(response);
+  }
+
+  @DeleteMapping("deleteCustomerByPhoneNumber/{phoneNumber}")
+  public ResponseEntity<ApiResponse<String>> deleteCustomerByPhoneNumber(@RequestParam String phoneNumber){
+    customerService.deleteCustomerByPhoneNumber(phoneNumber);
+    ApiResponse<String> response = ApiResponse.success("Customer deleted successfully");
+    return ResponseEntity.ok(response);
+  }
 }

@@ -31,12 +31,4 @@ public class LocationValidationResponse {
         .build();
     }
 
-    public static LocationValidationResponse error (String message){
-        return LocationValidationResponse.builder()
-        .isValid(false)
-        .message(message)
-        .timestamp(LocalDateTime.now())
-        .build();
-    }
-
 }

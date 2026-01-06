@@ -33,8 +33,9 @@ public class UserService {
   private final AuthenticationManager authenticationManager;
   private final PasswordEncoder passwordEncoder;
   private final JwtService jwtService;
+  private final UserMapper userMapper;
   // register
-  public void register(UserRequest request){
+  public UserResponse register(UserRequest request){
 
     if(userRepository.findByEmail(request.getEmail()).isPresent()){
       throw new DublicateResourceException("User with email: "+ request.getEmail() +" is already exist");
@@ -51,6 +52,7 @@ public class UserService {
     user.setPassword(passwordEncoder.encode(request.getPassword()));
 
     userRepository.save(user);
+    return userMapper.toResponse(user);
   }
   // login
   public LoginResponse login(UserLoginRequest request){

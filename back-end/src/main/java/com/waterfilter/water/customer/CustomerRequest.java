@@ -1,11 +1,10 @@
 package com.waterfilter.water.customer;
 
-import com.waterfilter.water.address.Address;
+import com.waterfilter.water.address.AddressRequest;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -15,8 +14,9 @@ public class CustomerRequest {
     private String firstName;
     private String middleName;
     private String lastName;
+    private String email;
     private String phoneNumber;
 
-    private List<Address> addresses;
+    private AddressRequest address;
     private Long branchId;
 }

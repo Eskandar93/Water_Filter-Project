@@ -13,6 +13,8 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     @Query(name = CustomerConstants.FIND_CUSTOMER_BY_PHONENUMBER)
     Optional<Customer> findCustomerByPhoneNumber(@Param("phoneNumber") String phoneNumber);
 
+    @Query(name = CustomerConstants.FIND_CUSTOMER_BY_EMAIL)
+    Optional<Customer> findCustomerByEmail(@Param("email") String email);
     @Query(name = CustomerConstants.FIND_CUSTOMER_BY_TOTALNAME)
     Optional<Customer> findCustomerByTotalName(@Param("firstName") String firstName,
                                                @Param("middleName") String middleName,

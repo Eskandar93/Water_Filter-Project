@@ -24,9 +24,9 @@ public class EmployeeController {
 
 
   @PostMapping("addEmployee")
-  public ResponseEntity<ApiResponse<String>> addEmployee(@RequestBody EmployeeRequest employeeRequest){
-    employeeService.addEmployee(employeeRequest);
-    ApiResponse<String> response = ApiResponse.created("Employee added successfully");
+  public ResponseEntity<ApiResponse<EmployeeResponse>> addEmployee(@RequestBody EmployeeRequest employeeRequest){
+    EmployeeResponse employeeResponse = employeeService.addEmployee(employeeRequest);
+    ApiResponse<EmployeeResponse> response = ApiResponse.created(employeeResponse, " Employee added successfully");
     return ResponseEntity.ok(response);
   }
 
