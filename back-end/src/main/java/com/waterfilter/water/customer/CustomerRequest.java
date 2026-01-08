@@ -18,5 +18,4 @@ public class CustomerRequest {
     private String phoneNumber;
 
     private AddressRequest address;
-    private Long branchId;
 }

@@ -18,5 +18,4 @@ public class CustomerResponse {
     private String phoneNumber;
 
     private AddressResponse address;
-    private Long branchId;
 }

@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 public class CustomerService {
 
     private final CustomerRepository customerRepository;
-    private final BranchRepository branchRepository;
     private final CustomerMapper customerMapper;
     private final AddressMapper addressMapper;
 
@@ -55,13 +54,6 @@ public class CustomerService {
              address.setCustomer(customer);
             customer.setAddress(address);
         }
-
-        if(request.getBranchId() != null){
-            Branch branch = branchRepository.findBranchByBranchId(request.getBranchId())
-            .orElseThrow(() -> new ResourceNotFoundException("Branch with id " + request.getBranchId() + " not found"));
-
-            customer.setCustomerBranch(branch);
-        }
     }
 
     // update
@@ -79,13 +71,6 @@ public class CustomerService {
     private void updateRelationships(Customer customer, CustomerRequest request) {
         if(request.getAddress() != null){
             updateAddress(customer, request.getAddress());
-        }
-
-        if(request.getBranchId() != null){
-                 Branch branch = branchRepository.findBranchByBranchId(request.getBranchId())
-            .orElseThrow(() -> new ResourceNotFoundException("Branch with Id: " + request.getBranchId() + " not exist"));
-
-            customer.setCustomerBranch(branch);
         }
 
     }
