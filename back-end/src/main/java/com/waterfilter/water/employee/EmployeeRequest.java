@@ -23,7 +23,6 @@ public class EmployeeRequest {
     private String email;
     private String username;
     private String phoneNumber;
-    private String password;
 
     private Long departmentId; 
     private Long branchId;

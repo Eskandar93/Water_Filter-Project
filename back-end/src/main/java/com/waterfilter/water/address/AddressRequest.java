@@ -17,5 +17,4 @@ public class AddressRequest {
     private String postalCode;
     private String famousPlace1;
     private String famousPlace2;
-    private LocationDto location;
 }

@@ -2,19 +2,20 @@ package com.waterfilter.water.address;
 
 import com.waterfilter.water.location.LocationDto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
-@Setter
-@Builder
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AddressResponse {
+public class AddressWithLocationRequest {
 
-    private Long id;
+  
     private String government;
     private String city;
     private String postalCode;
     private String famousPlace1;
     private String famousPlace2;
+    private LocationDto location;
 }

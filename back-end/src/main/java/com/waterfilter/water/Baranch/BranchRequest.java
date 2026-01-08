@@ -1,6 +1,8 @@
 package com.waterfilter.water.Baranch;
 
 import com.waterfilter.water.address.AddressRequest;
+import com.waterfilter.water.address.AddressWithLocationRequest;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,5 +16,5 @@ public class BranchRequest {
     private String phoneNumber;
     private String managerName;
     private double coverageRediusKm;
-    private AddressRequest branchAddress;
+    private AddressWithLocationRequest branchAddress;
 }

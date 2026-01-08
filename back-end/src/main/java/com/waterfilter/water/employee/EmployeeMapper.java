@@ -2,7 +2,6 @@ package com.waterfilter.water.employee;
 
 import java.time.LocalDate;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -11,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class EmployeeMapper {
 
-    private final PasswordEncoder passwordEncoder;
     public EmployeeResponse toEmployeeResponse(Employee employee) {
         return EmployeeResponse.builder()
                 .id(employee.getId())
@@ -42,7 +40,6 @@ public class EmployeeMapper {
         emploee.setLastName(employeeRequest.getLastName());
         emploee.setUsername(employeeRequest.getUsername());
         emploee.setEmail(employeeRequest.getEmail());
-        emploee.setPassword(passwordEncoder.encode(employeeRequest.getPassword()));
         emploee.setPhoneNumber(employeeRequest.getPhoneNumber());
         emploee.setUserRole(employeeRequest.getRole());
         emploee.setUserType(employeeRequest.getType());

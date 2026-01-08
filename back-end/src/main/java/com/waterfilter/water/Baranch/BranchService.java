@@ -1,7 +1,7 @@
 package com.waterfilter.water.Baranch;
 
 import com.waterfilter.water.address.Address;
-import com.waterfilter.water.address.AddressMapper;
+import com.waterfilter.water.address.AddressWithLocationMapper;
 import com.waterfilter.water.exception.DublicateResourceException;
 import com.waterfilter.water.exception.ResourceNotFoundException;
 
@@ -17,7 +17,7 @@ public class BranchService {
 
     private final BranchRepository branchRepository;
     private final BranchMapper branchMapper;
-    private final AddressMapper addressMapper;
+    private final AddressWithLocationMapper addressMapper;
 
     public BranchResponse addBranch(BranchRequest branchRequest) {
 
@@ -45,7 +45,7 @@ public class BranchService {
         }
 
         branchRepository.save(branch);
-        return branchMapper.toBranchResponse(branch);
+        return branchMapper.toResponse(branch);
     }
     public void updateBranch(Long oldBranchId, BranchRequest branchRequest) {
 
@@ -83,14 +83,14 @@ public class BranchService {
         Branch branch = branchRepository.findById(branchId)
         .orElseThrow(()-> new ResourceNotFoundException("Branch not found with id: " + branchId));
 
-        return branchMapper.toBranchResponse(branch);
+        return branchMapper.toResponse(branch);
     }
 
     public List<BranchResponse> getAllBranches() {
         List<Branch> branches = branchRepository.findAll();
 
         return branches.stream()
-                .map(branchMapper::toBranchResponse)
+                .map(branchMapper::toResponse)
                 .collect(Collectors.toList());
     }
 

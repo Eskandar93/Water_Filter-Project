@@ -1,5 +1,8 @@
 package com.waterfilter.water.Baranch;
 
+import com.waterfilter.water.address.AddressResponse;
+import com.waterfilter.water.address.AddressWithLocationResponse;
+
 import lombok.*;
 
 @Getter
@@ -14,4 +17,5 @@ public class BranchResponse {
     private String phoneNumber;
     private String managerName;
     private double coverageRediusKm;
+    private AddressWithLocationResponse addressResponse;
 }

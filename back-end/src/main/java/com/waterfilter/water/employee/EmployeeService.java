@@ -130,7 +130,6 @@ public class EmployeeService {
         if(employeeRequest.getEmail() != null){exsistingEmployee.setEmail(employeeRequest.getEmail());}
         if(employeeRequest.getUsername() != null){exsistingEmployee.setUsername(employeeRequest.getUsername());}
         if(employeeRequest.getPhoneNumber() != null){exsistingEmployee.setPhoneNumber(employeeRequest.getPhoneNumber());}
-        if(employeeRequest.getPassword() != null){exsistingEmployee.setPassword(passwordEncoder.encode(employeeRequest.getPassword()));}
         
         // Update role
         if(employeeRequest.getRole() != null && !employeeRequest.getRole().equals(exsistingEmployee.getUserRole())){
