@@ -41,12 +41,6 @@ public class Branch {
     }, fetch = FetchType.LAZY)
     private List<Employee> employees;
 
-    @OneToMany(mappedBy = "customerBranch",  cascade = {
-            CascadeType.PERSIST, CascadeType.MERGE,
-            CascadeType.REFRESH, CascadeType.DETACH
-    }, fetch = FetchType.LAZY)
-    private List<Customer> customers;
-
     @OneToMany(mappedBy = "branch", cascade = CascadeType.ALL)
     private List<Department> departments;
 

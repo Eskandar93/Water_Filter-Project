@@ -44,11 +44,6 @@ public class Customer {
     @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private Address address;
 
-    // Many users belong to one branch
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "branch_id")
-    private Branch customerBranch;
-
     @PrePersist
     @PreUpdate
     public void ensureAddressRelationship(){
