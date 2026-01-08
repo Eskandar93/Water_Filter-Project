@@ -1,6 +1,5 @@
 package com.waterfilter.water.customer;
 
-import com.waterfilter.water.Baranch.Branch;
 import com.waterfilter.water.address.Address;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

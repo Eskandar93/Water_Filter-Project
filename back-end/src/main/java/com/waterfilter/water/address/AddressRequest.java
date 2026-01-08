@@ -1,8 +1,5 @@
 package com.waterfilter.water.address;
 
-
-import com.waterfilter.water.location.LocationDto;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

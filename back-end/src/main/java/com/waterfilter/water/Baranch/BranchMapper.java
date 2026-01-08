@@ -4,10 +4,13 @@ import org.springframework.stereotype.Service;
 
 import com.waterfilter.water.address.AddressWithLocationMapper;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class BranchMapper {
 
-    private AddressWithLocationMapper addressMapper;
+    private final AddressWithLocationMapper addressMapper;
     public BranchResponse toResponse(Branch branch) {
         return BranchResponse.builder()
                 .id(branch.getBranchId())

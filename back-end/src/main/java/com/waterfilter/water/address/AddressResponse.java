@@ -1,7 +1,5 @@
 package com.waterfilter.water.address;
 
-import com.waterfilter.water.location.LocationDto;
-
 import lombok.*;
 
 @Getter

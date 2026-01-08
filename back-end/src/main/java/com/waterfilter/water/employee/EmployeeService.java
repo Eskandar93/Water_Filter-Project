@@ -2,7 +2,6 @@ package com.waterfilter.water.employee;
 
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.waterfilter.water.Baranch.Branch;
@@ -31,7 +30,6 @@ public class EmployeeService {
     private final BranchRepository branchRepository;
     private final InsuranceRepository insuranceRepository;
     private final AddressMapper addressMapper;
-    private final PasswordEncoder passwordEncoder;
 //    private final PasswordEncoder passwordEncoder;
 
     // add

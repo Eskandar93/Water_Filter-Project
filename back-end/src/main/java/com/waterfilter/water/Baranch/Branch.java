@@ -1,7 +1,6 @@
 package com.waterfilter.water.Baranch;
 
 import com.waterfilter.water.address.Address;
-import com.waterfilter.water.customer.Customer;
 import com.waterfilter.water.department.Department;
 import com.waterfilter.water.employee.Employee;
 import jakarta.persistence.*;

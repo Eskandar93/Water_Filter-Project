@@ -3,8 +3,6 @@ package com.waterfilter.water.customer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import com.waterfilter.water.Baranch.Branch;
-import com.waterfilter.water.Baranch.BranchRepository;
 import com.waterfilter.water.address.Address;
 import com.waterfilter.water.address.AddressMapper;
 import com.waterfilter.water.address.AddressRequest;
