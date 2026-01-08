@@ -40,7 +40,7 @@ public class DepartmentController {
   }
 
 
-  @GetMapping("geDepartmentById/{branchId}")
+  @GetMapping("geDepartmentByBranchId/{branchId}")
 
   public ResponseEntity<ApiResponse<List<DepartmentResponse>>> getDepartmentsByBranchId(@PathVariable Long branchId){
 
