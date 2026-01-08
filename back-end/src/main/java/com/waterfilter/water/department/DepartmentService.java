@@ -2,6 +2,7 @@ package com.waterfilter.water.department;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -93,6 +94,18 @@ public class DepartmentService {
 
     return departmentMapper.toDepartmentResponse(existingDepartment);
   }
+
+  List<DepartmentResponse> getDepartmentsByBranchId(Long branchId){
+    
+    Branch branch = branchRepository.findById(branchId)
+        .orElseThrow(()-> new ResourceNotFoundException("Branch not found with id: " + branchId));
+
+    List<Department> departments = branch.getDepartments();    
+    return departments.stream()
+                .map(departmentMapper::toDepartmentResponse)
+                .collect(Collectors.toList());
+  }
+
 
   public List<DepartmentResponse> getAllDepartments(){
 

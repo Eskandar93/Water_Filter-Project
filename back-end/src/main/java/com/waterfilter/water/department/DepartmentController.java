@@ -33,6 +33,7 @@ public class DepartmentController {
 
   @PutMapping("updateDepartment/{oldDepartmentId}")
   public ResponseEntity<ApiResponse<String>> updateDepartment(@PathVariable Long oldDepartmentId, @RequestBody DepartmentRequest departmentrequest){
+    
     departmentService.updateDepartment(oldDepartmentId, departmentrequest);
     ApiResponse<String> response = ApiResponse.success("Department updated successfully");
     return ResponseEntity.ok(response);
@@ -40,9 +41,11 @@ public class DepartmentController {
 
 
   @GetMapping("geDepartmentById/{departmentId}")
-  public ResponseEntity<ApiResponse<DepartmentResponse>> getDepartmentById(@PathVariable Long departmentId){
-    DepartmentResponse departmentResponse = departmentService.getDepartmentById(departmentId);
-    ApiResponse<DepartmentResponse> response = ApiResponse.success(departmentResponse);
+
+  public ResponseEntity<ApiResponse<List<DepartmentResponse>>> getDepartmentsByBranchId(@PathVariable Long branchId){
+
+    List<DepartmentResponse> departmentsResponse = departmentService.getDepartmentsByBranchId(branchId);
+    ApiResponse<List<DepartmentResponse>> response = ApiResponse.success(departmentsResponse);
     return ResponseEntity.ok(response);
   }
 
