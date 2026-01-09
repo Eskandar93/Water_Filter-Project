@@ -2,6 +2,7 @@ package com.waterfilter.water.employee;
 
 import java.time.LocalDate;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class EmployeeMapper {
 
+    private final PasswordEncoder passwordEncoder;
     public EmployeeResponse toEmployeeResponse(Employee employee) {
         return EmployeeResponse.builder()
                 .id(employee.getId())
@@ -25,25 +27,26 @@ public class EmployeeMapper {
                 .type(employee.getUserType())
                 .departmentId(employee.getDepartment() != null ? employee.getDepartment().getDepartmentId() : null)
                 .branchId(employee.getEmployeeBranch() != null ? employee.getEmployeeBranch().getBranchId() : null)
-                // department
+                .departmentId(employee.getDepartment() != null ? employee.getDepartment().getDepartmentId() : null)
                 // insurance
                 .build();
     }
 
     public Employee toEntity(EmployeeRequest employeeRequest){
-         Employee emploee = Employee.builder()
+         Employee employee = Employee.builder()
         .hireDate(LocalDate.now())
         .build();
 
-        emploee.setFirstName(employeeRequest.getFirstName());
-        emploee.setMiddleName(employeeRequest.getMiddleName());
-        emploee.setLastName(employeeRequest.getLastName());
-        emploee.setUsername(employeeRequest.getUsername());
-        emploee.setEmail(employeeRequest.getEmail());
-        emploee.setPhoneNumber(employeeRequest.getPhoneNumber());
-        emploee.setUserRole(employeeRequest.getRole());
-        emploee.setUserType(employeeRequest.getType());
+        employee.setFirstName(employeeRequest.getFirstName());
+        employee.setMiddleName(employeeRequest.getMiddleName());
+        employee.setLastName(employeeRequest.getLastName());
+        employee.setUsername(employeeRequest.getUsername());
+        employee.setEmail(employeeRequest.getEmail());
+        employee.setPhoneNumber(employeeRequest.getPhoneNumber());
+        employee.setPassword(passwordEncoder.encode(employeeRequest.getPassword()));
+        employee.setUserRole(employeeRequest.getRole());
+        employee.setUserType(employeeRequest.getType());
 
-        return emploee;
+        return employee;
     }
 }
