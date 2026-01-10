@@ -13,7 +13,7 @@ public class BranchMapper {
     private final AddressWithLocationMapper addressMapper;
     public BranchResponse toResponse(Branch branch) {
         return BranchResponse.builder()
-                .id(branch.getBranchId())
+                .id(branch.getId())
                 .name(branch.getName())
                 .phoneNumber(branch.getPhoneNumber())
                 .managerName(branch.getManagerName())

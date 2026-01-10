@@ -60,7 +60,7 @@ public class EmployeeService {
 
         //set branch to employee
         if(employeeRequest.getBranchId() != null) {
-            Branch branch = branchRepository.findBranchByBranchId(employeeRequest.getBranchId())
+            Branch branch = branchRepository.findBranchById(employeeRequest.getBranchId())
             .orElseThrow(() -> new ResourceNotFoundException("Branch with id " + employeeRequest.getBranchId() + " not found"));
             employee.setEmployeeBranch(branch);
         }
@@ -154,7 +154,7 @@ public class EmployeeService {
 
         // Update branch
         if(employeeRequest.getBranchId() != null){
-            Branch branch = branchRepository.findBranchByBranchId(employeeRequest.getBranchId())
+            Branch branch = branchRepository.findBranchById(employeeRequest.getBranchId())
             .orElseThrow(() -> new ResourceNotFoundException("Branch with Id: " + employeeRequest.getBranchId() + " not exist"));
 
             exsistingEmployee.setEmployeeBranch(branch);

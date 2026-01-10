@@ -7,10 +7,13 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.waterfilter.water.Baranch.Branch;
+import com.waterfilter.water.Baranch.BranchRepository;
 import com.waterfilter.water.employee.Employee;
 import com.waterfilter.water.employee.EmployeeRepository;
 import com.waterfilter.water.exception.BusinessException;
 import com.waterfilter.water.exception.ResourceNotFoundException;
+import com.waterfilter.water.user.Users;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,9 +22,12 @@ import lombok.RequiredArgsConstructor;
 public class AttendanceService {
 
   private final EmployeeRepository employeeRepository;
+  private final BranchRepository branchRepository;
   private final AttendanceRepository attendanceRepository;
   private final AttendanceMapper attendanceMapper;
+
   public void registerAttendance(CheckInRequest request){
+
     Employee employee = findEmployeeById(request.getEmployeeId());
     
     LocalDate today = LocalDate.now();
@@ -48,13 +54,35 @@ public class AttendanceService {
     attendanceRepository.save(attendance);
   }
 
-  public AttendanceResponse getEmployeeAttendanceForDate(Long employeeId, LocalDate date){
+  public AttendanceResponse getEmployeeByIdAttendanceForDate(Long employeeId, LocalDate date){
     findEmployeeById(employeeId);
 
     Attendance attendance = attendanceRepository.findByEmployeeIdAndAttendanceDate(employeeId, date)
       .orElseThrow(()-> new BusinessException("No attendance record found for date: " + date + " for employee id: " + employeeId));
     
     return attendanceMapper.toAttendanceResponse(attendance);
+  }
+
+    public AttendanceResponse getEmployeeByPhoneNumberAttendanceForDate(String phoneNumber, LocalDate date){
+    Users user = findEmployeeByPhoneNumber(phoneNumber);
+
+    Attendance attendance = attendanceRepository.findByEmployeeIdAndAttendanceDate(user.getId(), date)
+      .orElseThrow(()-> new BusinessException("No attendance record found for date: " + date + " for employee phoneNumber: " + phoneNumber));
+    
+    return attendanceMapper.toAttendanceResponse(attendance);
+  }
+
+    public List<AttendanceResponse> getEmployeesAttendanceByBranchIdForDate(Long branchId, LocalDate date){
+    findBranchById(branchId);
+
+    List<Attendance> attendances = attendanceRepository.findByBranchIdAndAttendanceDate(branchId, date);
+      if(attendances.isEmpty()){
+        throw new BusinessException("No attendance record found for date: " + date + " for branch id: " + branchId);
+  
+      }
+    return attendances.stream()
+            .map(attendanceMapper::toAttendanceResponse)
+            .collect(Collectors.toList());
   }
 
     public List<AttendanceResponse> getAllEmployeeAttendanceForDate(LocalDate date){
@@ -93,6 +121,15 @@ public class AttendanceService {
   public Employee findEmployeeById(Long employeeId){
     return employeeRepository.findById(employeeId).orElseThrow(() -> new ResourceNotFoundException("Employee with id: " + employeeId + " not exist"));
   }
+
+  public Users findEmployeeByPhoneNumber(String phoneNumber){
+    return employeeRepository.findUserByPhoneNumber(phoneNumber).orElseThrow(() -> new ResourceNotFoundException("Employee with phone number: " + phoneNumber + " not exist"));
+  }
+
+  public Branch findBranchById(Long branchId){
+    return branchRepository.findById(branchId).orElseThrow(() -> new ResourceNotFoundException("Branch with id: " + branchId + " not exist"));
+  }
+
 
   private void validateNoExistingAttendance(Long employeeId, LocalDate date){
     if(attendanceRepository.findByEmployeeIdAndAttendanceDate(employeeId, date).isPresent()){

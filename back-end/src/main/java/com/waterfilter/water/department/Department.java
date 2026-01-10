@@ -24,13 +24,13 @@ query = "Select d From Department d Where d.departmentId = :deparmentId")
 query = "Select d From Department d Where d.name = :departmentName")
 
 @NamedQuery(name = DepartmentConstants.FIND_DEPARTMENTS_BY_BRANCH, 
-    query = "Select d From Department d Where d.branch.branchId = :branchId")  
+    query = "Select d From Department d Where d.branch.id = :branchId")  
     
 @NamedQuery(name = DepartmentConstants.FIND_DEPARTMENT_BY_NAME_And_BRANCH,
-query = "Select d From Department d Where d.name = :departmentName And d.branch.branchId = :branchId")
+query = "Select d From Department d Where d.name = :departmentName And d.branch.id = :branchId")
 
 @NamedQuery(name = DepartmentConstants.FIND_DEPARTMENT_BY_DEPARTMENTID_And_BRANCH,
-query = "Select d From Department d Where d.departmentId = :departmentId And d.branch.branchId = :branchId")
+query = "Select d From Department d Where d.departmentId = :departmentId And d.branch.id = :branchId")
 public class Department {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

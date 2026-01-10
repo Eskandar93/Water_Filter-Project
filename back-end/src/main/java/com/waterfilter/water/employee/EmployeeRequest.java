@@ -29,7 +29,7 @@ public class EmployeeRequest {
     private Long branchId;
     private AddressRequest addressRequest;
     private List<Long> insuranceIds;    
-    private BigDecimal salary;   // Optional (Admin only)
+    private BigDecimal salary;
     private UserRole role;
     private UserType type;
 }

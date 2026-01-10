@@ -10,8 +10,8 @@ import java.util.Optional;
 @Repository
 public interface BranchRepository extends JpaRepository<Branch, Long> {
 
-    @Query(name = BranchConstants.FIND_BRANCH_BY_BRANCHID)
-    Optional<Branch> findBranchByBranchId(@Param("branchId") Long branchId);
+    @Query(name = BranchConstants.FIND_BRANCH_BY_ID)
+    Optional<Branch> findBranchById(@Param("branchId") Long branchId);
 
     Optional<Branch> findByName(String name);
 

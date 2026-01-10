@@ -1,5 +1,6 @@
 package com.waterfilter.water.employee;
 
+import com.waterfilter.water.attendance.Attendance;
 import com.waterfilter.water.user.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

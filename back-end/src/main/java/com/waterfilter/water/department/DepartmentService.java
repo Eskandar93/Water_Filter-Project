@@ -33,7 +33,7 @@ public class DepartmentService {
                 departmentrequest.getName()+ " already exist");
     }
 
-    Optional<Branch> branch = branchRepository.findBranchByBranchId(departmentrequest.getBranchId());
+    Optional<Branch> branch = branchRepository.findBranchById(departmentrequest.getBranchId());
     if(!branch.isPresent()){
         throw new ResourceNotFoundException("Branch not found with id: "+ 
                 departmentrequest.getBranchId());
@@ -58,8 +58,8 @@ public class DepartmentService {
       Department department = exsistingDepartment.get();
       boolean hasChanges = false;
 
-      if(departmentrequest.getBranchId() != null && !departmentrequest.getBranchId().equals(department.getBranch().getBranchId())){
-        Optional<Branch> branch = branchRepository.findBranchByBranchId(departmentrequest.getBranchId() );
+      if(departmentrequest.getBranchId() != null && !departmentrequest.getBranchId().equals(department.getBranch().getId())){
+        Optional<Branch> branch = branchRepository.findBranchById(departmentrequest.getBranchId() );
         if(!branch.isPresent()){
             throw new ResourceNotFoundException("Branch not found with id: "+ departmentrequest.getBranchId());
         }

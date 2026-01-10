@@ -8,7 +8,7 @@ public class DepartmentMapper {
   public DepartmentResponse toDepartmentResponse(Department department){
     return DepartmentResponse.builder()
         .id(department.getDepartmentId())
-        .branchId(department.getBranch().getBranchId())
+        .branchId(department.getBranch().getId())
         .name(department.getName())
         .build();
   }

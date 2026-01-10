@@ -26,7 +26,7 @@ public class EmployeeMapper {
                 .role(employee.getUserRole())
                 .type(employee.getUserType())
                 .departmentId(employee.getDepartment() != null ? employee.getDepartment().getDepartmentId() : null)
-                .branchId(employee.getEmployeeBranch() != null ? employee.getEmployeeBranch().getBranchId() : null)
+                .branchId(employee.getEmployeeBranch() != null ? employee.getEmployeeBranch().getId() : null)
                 .departmentId(employee.getDepartment() != null ? employee.getDepartment().getDepartmentId() : null)
                 // insurance
                 .build();

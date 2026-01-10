@@ -31,9 +31,23 @@ public class AttendanceController {
   }
 
   @GetMapping("date/{employeeId}")
-  public ResponseEntity<ApiResponse<AttendanceResponse>> getEmployeeAttendanceForDate(@PathVariable Long employeeId, @RequestParam LocalDate date){
-    AttendanceResponse response = attendanceService.getEmployeeAttendanceForDate(employeeId, date);
-    ApiResponse<AttendanceResponse> apiResponse = ApiResponse.success(response, "Attendance for date retrieved");
+  public ResponseEntity<ApiResponse<AttendanceResponse>> getEmployeeAttendanceByIdAndDate(@PathVariable Long employeeId, @RequestParam LocalDate date){
+    AttendanceResponse response = attendanceService.getEmployeeByIdAttendanceForDate(employeeId, date);
+    ApiResponse<AttendanceResponse> apiResponse = ApiResponse.success(response, "Attendance for date and employee id retrieved");
+    return ResponseEntity.ok(apiResponse);
+  }
+
+  @GetMapping("date/{phoneNumber}")
+  public ResponseEntity<ApiResponse<AttendanceResponse>> getEmployeeAttendanceByPhoneNumberAndDate(@RequestParam String phoneNumber, @RequestParam LocalDate date){
+    AttendanceResponse response = attendanceService.getEmployeeByPhoneNumberAttendanceForDate(phoneNumber, date);
+    ApiResponse<AttendanceResponse> apiResponse = ApiResponse.success(response, "Attendance for date and phone number retrieved");
+    return ResponseEntity.ok(apiResponse);
+  }
+
+  @GetMapping("date/{branchId}")
+  public ResponseEntity<ApiResponse<List<AttendanceResponse>>> getEmployeesAttendanceByBranchIdForDate(@PathVariable Long branchId, @RequestParam LocalDate date){
+    List<AttendanceResponse> response = attendanceService.getEmployeesAttendanceByBranchIdForDate(branchId, date);
+    ApiResponse<List<AttendanceResponse>> apiResponse = ApiResponse.success(response, "Attendance for date and branchId retrieved");
     return ResponseEntity.ok(apiResponse);
   }
 

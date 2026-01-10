@@ -14,7 +14,7 @@ public class ProfileMapper {
         .email(employee.getEmail())
         .fullName(employee.getFirstName() + " " + employee.getLastName())
         .role(employee.getUserRole())
-        .branchId(employee.getEmployeeBranch().getBranchId())
+        .branchId(employee.getEmployeeBranch().getId())
         .branchName(employee.getEmployeeBranch().getName())
         .departmentId(employee.getDepartment().getDepartmentId())
         .departmentName(employee.getDepartment().getName())

@@ -18,13 +18,13 @@ import java.util.List;
 @AllArgsConstructor
 @Table(name = "branch")
 
-@NamedQuery(name = BranchConstants.FIND_BRANCH_BY_BRANCHID,
-                    query = "SELECT b FROM Branch b WHERE b.branchId = :branchId")
+@NamedQuery(name = BranchConstants.FIND_BRANCH_BY_ID,
+                    query = "SELECT b FROM Branch b WHERE b.id = :branchId")
 public class Branch {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long branchId;
+    private Long id;
 
     private String name;
     private String phoneNumber;
