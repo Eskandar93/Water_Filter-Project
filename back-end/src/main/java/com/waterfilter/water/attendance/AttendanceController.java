@@ -37,14 +37,14 @@ public class AttendanceController {
     return ResponseEntity.ok(apiResponse);
   }
 
-  @GetMapping("{phoneNumber}")
+  @GetMapping("getEmployeeAttendanceByPhoneNumber/{phoneNumber}")
   public ResponseEntity<ApiResponse<AttendanceResponse>> getEmployeeAttendanceByPhoneNumber(@RequestParam String phoneNumber){
     AttendanceResponse response = attendanceService.getEmployeeAttendanceByPhoneNumber(phoneNumber);
     ApiResponse<AttendanceResponse> apiResponse = ApiResponse.success(response, "Attendance for date and phone number retrieved");
     return ResponseEntity.ok(apiResponse);
   }
 
-  @GetMapping("{branchId}")
+  @GetMapping("getEmployeeAttendanceByBranchId/{branchId}")
   public ResponseEntity<ApiResponse<List<AttendanceResponse>>> getEmployeesAttendanceByBranchIdForDate(@PathVariable Long branchId){
     List<AttendanceResponse> response = attendanceService.getEmployeesAttendanceByBranchId(branchId);
     ApiResponse<List<AttendanceResponse>> apiResponse = ApiResponse.success(response, "Attendance for date and branchId retrieved");
