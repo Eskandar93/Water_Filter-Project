@@ -63,21 +63,21 @@ public class AttendanceService {
     return attendanceMapper.toAttendanceResponse(attendance);
   }
 
-    public AttendanceResponse getEmployeeByPhoneNumberAttendanceForDate(String phoneNumber, LocalDate date){
+    public AttendanceResponse getEmployeeAttendanceByPhoneNumber(String phoneNumber){
     Users user = findEmployeeByPhoneNumber(phoneNumber);
 
-    Attendance attendance = attendanceRepository.findByEmployeeIdAndAttendanceDate(user.getId(), date)
-      .orElseThrow(()-> new BusinessException("No attendance record found for date: " + date + " for employee phoneNumber: " + phoneNumber));
+    Attendance attendance = attendanceRepository.findByEmployeeId(user.getId())
+      .orElseThrow(()-> new BusinessException("No attendance record found for employee phoneNumber: " + phoneNumber));
     
     return attendanceMapper.toAttendanceResponse(attendance);
   }
 
-    public List<AttendanceResponse> getEmployeesAttendanceByBranchIdForDate(Long branchId, LocalDate date){
+    public List<AttendanceResponse> getEmployeesAttendanceByBranchId(Long branchId){
     findBranchById(branchId);
 
-    List<Attendance> attendances = attendanceRepository.findByBranchIdAndAttendanceDate(branchId, date);
+    List<Attendance> attendances = attendanceRepository.findByBranchId(branchId);
       if(attendances.isEmpty()){
-        throw new BusinessException("No attendance record found for date: " + date + " for branch id: " + branchId);
+        throw new BusinessException("No attendance record found for branch id: " + branchId);
   
       }
     return attendances.stream()

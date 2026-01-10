@@ -11,7 +11,8 @@ import org.springframework.stereotype.Repository;
 public interface AttendanceRepository extends JpaRepository<Attendance, Long>{
 
   Optional<Attendance> findByEmployeeIdAndAttendanceDate(Long employeeId, LocalDate date);
-  List<Attendance> findByBranchIdAndAttendanceDate(Long branchId, LocalDate date);
+  List<Attendance> findByBranchId(Long branchId);
   List<Attendance> findByAttendanceDate(LocalDate date);
+  Optional<Attendance> findByEmployeeId(Long id);
 
 }
