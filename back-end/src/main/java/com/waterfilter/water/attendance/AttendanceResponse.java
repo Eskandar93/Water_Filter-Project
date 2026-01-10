@@ -15,9 +15,12 @@ import lombok.NoArgsConstructor;
 public class AttendanceResponse {
   
     private Long id;
-    private Long employeeId;
-    private String employeeUsername;
+    private String firstName;
+    private String middleName;
+    private String lastName;
+    private String phoneNumber;
     private String branchName;
+    private String departmentName;
     
     private LocalDate attendanceDate;
     

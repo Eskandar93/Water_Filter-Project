@@ -1,9 +1,13 @@
 package com.waterfilter.water.employee;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import com.waterfilter.water.insurance.InsuranceMapper;
+import com.waterfilter.water.insurance.InsuranceType;
 
 import lombok.RequiredArgsConstructor;
 
@@ -12,7 +16,10 @@ import lombok.RequiredArgsConstructor;
 public class EmployeeMapper {
 
     private final PasswordEncoder passwordEncoder;
+    private final InsuranceMapper insuranceMapper;
     public EmployeeResponse toEmployeeResponse(Employee employee) {
+
+        List<InsuranceType> insurancesTypes = insuranceMapper.toInsuranceTypeList(employee.getInsurances());
         return EmployeeResponse.builder()
                 .id(employee.getId())
                 .firstName(employee.getFirstName())
@@ -25,10 +32,9 @@ public class EmployeeMapper {
                 .salary(employee.getSalary())
                 .role(employee.getUserRole())
                 .type(employee.getUserType())
-                .departmentId(employee.getDepartment() != null ? employee.getDepartment().getDepartmentId() : null)
-                .branchId(employee.getEmployeeBranch() != null ? employee.getEmployeeBranch().getId() : null)
-                .departmentId(employee.getDepartment() != null ? employee.getDepartment().getDepartmentId() : null)
-                // insurance
+                .departmentName(employee.getDepartment() != null ? employee.getDepartment().getName() : null)
+                .branchName(employee.getEmployeeBranch() != null ? employee.getEmployeeBranch().getName() : null)
+                .insurances(employee.getInsurances() != null ? insurancesTypes : null)
                 .build();
     }
 

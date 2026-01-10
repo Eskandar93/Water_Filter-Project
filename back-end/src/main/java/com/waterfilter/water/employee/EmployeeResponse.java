@@ -4,7 +4,9 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
+import com.waterfilter.water.insurance.InsuranceType;
 import com.waterfilter.water.user.UserRole;
 import com.waterfilter.water.user.UserType;
 
@@ -29,13 +31,12 @@ public class EmployeeResponse {
 
     // Department info
     private String departmentName;
-    private Long departmentId;
 
     // Branch info
     private String branchName;
-    private Long branchId;
+
 
     // Nested DTOs
 //    private List<AddressResponse> addresses;
-//    private List<InsuranceResponse> insurances;
+    private List<InsuranceType> insurances;
 }
